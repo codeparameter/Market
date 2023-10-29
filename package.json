@@ -1,0 +1,14 @@
+{
+  "name": "market",
+  "version": "1.0.0",
+  "description": "Quera Blockchain Bootcamp Teamwork Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^6.8.0"
+  }
+}
