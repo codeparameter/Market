@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^6.8.0"
+    "web3": "^4.2.1"
   }
 }
