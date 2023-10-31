@@ -5,24 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market</title>
-    <script language="javascript" type="text/javascript" src="../node_modules/web3/dist/web3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-    <script>
-        window.addEventListener('load', function() {
-
-        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-        if (typeof web3 !== 'undefined') {
-        // Use Mist/MetaMask's provider
-            web3js = new Web3(web3.currentProvider);
-        } else {
-            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        }
-
-        // Now you can start your app & access web3js freely:
-        startApp()
-
-        })
-    </script>
+    <div class="container">
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>
