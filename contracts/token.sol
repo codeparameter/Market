@@ -7,9 +7,7 @@ contract ABCoin is ERC20{
     
     address public owner;
 
-    constructor(string memory _name, 
-                string memory _alias) ERC20(_name, _alias) {
-
+    constructor() ERC20("ABCoin", "ABC") {
         owner = msg.sender;
     }
 

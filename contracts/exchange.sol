@@ -5,17 +5,6 @@ import "./lottery.sol";
 
 contract Exchange is Lottery {
 
-    struct ExchangeRequest {
-        address user;
-        uint256 tokenAmount;
-        uint256 weiAmount;
-        uint256 rate; // wei per token
-        bool allAtOnce;
-    }
-
-    ExchangeRequest[] public buyRequests;
-    ExchangeRequest[] public sellRequests;
-
     event BuyRequestStored(
         address indexed buyer, 
         uint256 indexed weiAmount, 
@@ -45,6 +34,19 @@ contract Exchange is Lottery {
         address indexed seller, 
         uint256 indexed lastWeiAmount, 
         uint256 indexed lastTokenAmunt);
+
+    
+
+    struct ExchangeRequest {
+        address user;
+        uint256 tokenAmount;
+        uint256 weiAmount;
+        uint256 rate; // wei per token
+        bool allAtOnce;
+    }
+
+    ExchangeRequest[] public buyRequests;
+    ExchangeRequest[] public sellRequests;
 
     constructor(address _token) Lottery(_token) {
     }
