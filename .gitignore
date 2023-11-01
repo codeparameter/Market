@@ -1,3 +1,5 @@
-contracts/.deps
-contracts/artifacts
-node_modules
+*.deps
+*artifacts
+*node_modules
+*.parcel-cache
+*dist

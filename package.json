@@ -1,14 +1,23 @@
 {
-  "name": "market",
-  "version": "1.0.0",
-  "description": "Quera Blockchain Bootcamp Teamwork Project",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "web3": "^4.2.1"
-  }
+	"name": "market",
+	"version": "1.0.0",
+	"description": "Quera Blockchain Bootcamp Teamwork Project",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "parcel index.html",
+		"build": "parcel build"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"ethers": "^5.7.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-router-dom": "^6.18.0"
+	},
+	"devDependencies": {
+		"parcel": "^2.10.1",
+		"process": "^0.11.10"
+	}
 }
