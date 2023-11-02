@@ -16,7 +16,7 @@ contract ABCoin is ERC20{
         _;
     }
 
-    function mint(address account, uint256 value) external onlyOwner  {
+    function mint(address account, uint256 value) internal  onlyOwner  {
         _mint(account, value);
     }
 

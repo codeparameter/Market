@@ -1,12 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-
 import "./NFTM.sol";
+import "./ParsaTokenInterface.sol";
 
 contract NFTMarket is NFTM {
+
+    enum NFTStatus{
+        owned,
+        ethSwap,
+        tokenSwap,
+        inAuction
+    }
+
+    struct Swap{
+        address seller;
+        uint256 tokenId;
+        uint256 price;
+    }
 
     struct Auction {
         address seller;
@@ -18,26 +29,69 @@ contract NFTMarket is NFTM {
         bool ended;
     }
 
+    mapping(uint256 => NFTStatus) public nftStatuses;
+    mapping(uint256 => Swap) public ethSwaps;
+    mapping(uint256 => Swap) public tokenSwaps;
     mapping(uint256 => Auction) public auctions;
+    mapping(uint256 => mapping(address => uint256)) public bidding;
 
     constructor() NFTM() {}
 
-    function sellByPrice(address seller, address buyer, uint256 tokenId, uint256 price) external {
-        require(ownerOf(tokenId) == seller, "Not the owner of the NFT");
+    modifier checkSell(uint256 tokenId){
+        require(ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
         require(getApproved(tokenId) == address(this), "Contract not approved to sell NFT");
+        require(nftStatuses[tokenId] == NFTStatus.owned, "Already for sell");
+        _;
+    }
 
-        safeTransferFrom(seller, buyer, tokenId);
+    function setETHSwapOrder(uint256 tokenId, uint256 price) external checkSell(tokenId) {
+        require(price > 0, "Must set a solid price");        
+        nftStatuses[tokenId] = NFTStatus.ethSwap;
+        ethSwaps[tokenId] = Swap(
+            msg.sender,
+            tokenId,
+            price
+        );
+    }
+
+    function swapETH(uint256 tokenId) external payable {
+        Swap storage swap = ethSwaps[tokenId];
+        uint256 price = swap.price;
+        require(msg.value >= price, "Insufficient payment for the NFT");
+
+        payable(swap.seller).transfer(swap.price);
+        safeTransferFrom(swap.seller, msg.sender, tokenId);
+    }
+
+    function setTokenSwapOrder(uint256 tokenId, uint256 price) external checkSell(tokenId) {
+        require(price > 0, "Must set a solid price");
+        nftStatuses[tokenId] = NFTStatus.tokenSwap;
+        tokenSwaps[tokenId] = Swap(
+            msg.sender,
+            tokenId,
+            price
+        );
+    }
+
+    function swapToken(uint256 tokenId, ParsaTokenInterface token) external payable {
+        Swap storage swap = ethSwaps[tokenId];
+
+        uint256 price = swap.price;
+        require(token.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
+
+        token.transferFrom(msg.sender, swap.seller, swap.price);
+        safeTransferFrom(swap.seller, msg.sender, tokenId);
     }
 
     function createAuction(
         uint256 tokenId,
         uint256 minimumPrice,
         uint256 duration
-    ) external {
-        require(ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
-        require(getApproved(tokenId) == address(this), "Contract not approved to sell NFT");
-
+    ) external checkSell(tokenId) {
+        
+        nftStatuses[tokenId] = NFTStatus.inAuction;
         uint256 endTime = block.timestamp + duration;
+
         auctions[tokenId] = Auction({
             seller: msg.sender,
             tokenId: tokenId,
@@ -52,15 +106,13 @@ contract NFTMarket is NFTM {
     function bid(uint256 tokenId) external payable {
         Auction storage auction = auctions[tokenId];
         require(block.timestamp < auction.endTime, "Auction already ended");
+        require(msg.value > auction.minimumPrice, "Bid must be higher than minimum price");
         require(msg.value > auction.highestBid, "Bid must be higher than current highest bid");
-
-        if (auction.highestBid != 0) {
-            // Refund the previous highest bidder
-            payable(auction.highestBidder).transfer(auction.highestBid);
-        }
 
         auction.highestBidder = msg.sender;
         auction.highestBid = msg.value;
+        payable(address(this)).transfer(msg.value);
+        bidding[tokenId][msg.sender] = auction.highestBid;
     }
 
     function endAuction(uint256 tokenId) external {
@@ -72,6 +124,13 @@ contract NFTMarket is NFTM {
         if (auction.highestBid != 0) {
             // Transfer the NFT to the highest bidder
             safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
+            payable(auction.seller).transfer(auction.highestBid);
         }
+    }
+
+    function payBack(uint256 tokenId) external{
+        Auction storage auction = auctions[tokenId];
+        require(auction.ended, "Auction not yet ended");
+        payable(msg.sender).transfer(bidding[tokenId][msg.sender]);
     }
 }
