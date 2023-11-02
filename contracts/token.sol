@@ -20,11 +20,11 @@ contract ABCoin is ERC20{
         _mint(account, value);
     }
 
-    function transferFrom(
+    function tokenTransferFrom(
             address sender, 
             address recipient, 
             uint256 amount) 
-            public virtual override 
+            public 
             onlyOwner
             returns (bool){
         
@@ -32,7 +32,7 @@ contract ABCoin is ERC20{
             return false;
         }
         
-        return super.transferFrom(sender, recipient, amount);
+        return transferFrom(sender, recipient, amount);
     }
 
     
