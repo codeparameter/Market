@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./lottery.sol";
+import "./token.sol";
 
-contract Exchange is Lottery {
+contract Exchange is ABCoin {
 
     event BuyRequestStored(
         address indexed buyer, 
@@ -36,7 +36,6 @@ contract Exchange is Lottery {
         uint256 indexed lastTokenAmunt);
 
     
-
     struct ExchangeRequest {
         address user;
         uint256 tokenAmount;
@@ -47,9 +46,6 @@ contract Exchange is Lottery {
 
     ExchangeRequest[] public buyRequests;
     ExchangeRequest[] public sellRequests;
-
-    constructor(address _token) Lottery(_token) {
-    }
 
 
     // 
