@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "parcel index.html",
+		"start": "parcel index.html -p 3002",
 		"build": "parcel build"
 	},
 	"author": "",
@@ -18,9 +18,13 @@
 		"framer-motion": "^10.16.4",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-icons": "^4.11.0",
 		"react-router-dom": "^6.18.0"
 	},
 	"devDependencies": {
+		"eslint": "^8.52.0",
+		"eslint-config-react-app": "^7.0.1",
+		"eslint-plugin-react": "^7.33.2",
 		"parcel": "^2.10.1",
 		"process": "^0.11.10"
 	}
