@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./NFTM.sol";
 import "./dealmaker.sol";
+import "./marketInterface.sol";
 
 contract Market is NFTM {
 
@@ -17,16 +18,6 @@ contract Market is NFTM {
         address seller;
         uint256 tokenId;
         uint256 price;
-    }
-
-    struct Auction {
-        address seller;
-        uint256 tokenId;
-        uint256 minimumPrice;
-        uint256 endTime;
-        address highestBidder;
-        uint256 highestBid;
-        bool ended;
     }
 
     DealMaker private token = new DealMaker();
@@ -72,7 +63,7 @@ contract Market is NFTM {
         );
     }
 
-    function swapToken(uint256 tokenId) external payable {
+    function swapToken(uint256 tokenId) external{
         Swap storage swap = ethSwaps[tokenId];
 
         uint256 price = swap.price;
@@ -100,6 +91,10 @@ contract Market is NFTM {
             highestBid: 0,
             ended: false
         });
+    }
+
+    function showAuction(uint256 tokenId) external view returns (Auction memory){
+        return auctions[tokenId];
     }
 
     function bid(uint256 tokenId) external payable {

@@ -22,7 +22,6 @@ contract NFTM is ERC721URIStorage{
         _setTokenURI(newItemId, tokenURI);
         
         userNFTs[msg.sender].push(newItemId);
-
         return newItemId;
     }
 
@@ -31,19 +30,11 @@ contract NFTM is ERC721URIStorage{
         return tokenURI(tokenId);
     }
 
-    function getAllNFTs() external view returns (uint256[] memory) {
-        return _getAllTokenIds();
+    function getLastNFT() external view returns (uint256) {
+        return _tokenIds.current();
     }
 
     function getNFTsOfUser(address user) external view returns (uint256[] memory) {
         return userNFTs[user];
-    }
-
-    function _getAllTokenIds() internal view returns (uint256[] memory) {
-        uint256[] memory result = new uint256[](_tokenIds.current());
-        for (uint256 i = 0; i < _tokenIds.current(); i++) {
-            result[i] = i + 1;
-        }
-        return result;
     }
 }
