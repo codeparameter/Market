@@ -20,6 +20,12 @@ struct Auction {
     bool ended;
 }
 
+// localhost:port
+// landingpage links :
+// token page
+// nfts
+// auctions
+
 interface MarketInterface {
     
     // localhost:port/token
