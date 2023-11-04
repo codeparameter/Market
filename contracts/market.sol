@@ -2,24 +2,25 @@
 pragma solidity ^0.8.0;
 
 import "./NFTMarket.sol";
-import "./marketInterface.sol"; // structs...
+
+struct Swap{
+    address seller;
+    uint256 tokenId;
+    uint256 price;
+}
+
+struct Auction {
+    address seller;
+    uint256 tokenId;
+    uint256 minimumPrice;
+    uint256 endTime;
+    address highestBidder;
+    uint256 highestBid;
+    bool ended;
+}
 
 contract Market is NFTMarket{
-    enum NFTStatus{
-        owned,
-        ethSwap,
-        tokenSwap,
-        inAuction
-    }
 
-    struct Swap{
-        address seller;
-        uint256 tokenId;
-        uint256 price;
-    }
-
-    DealMaker private token = new DealMaker();
-    mapping(uint256 => NFTStatus) public nftStatuses;
     mapping(uint256 => Swap) public ethSwaps;
     mapping(uint256 => Swap) public tokenSwaps;
     mapping(uint256 => Auction) public auctions;
@@ -28,13 +29,14 @@ contract Market is NFTMarket{
     modifier checkSell(uint256 tokenId){
         require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
         require(nftm.getApproved(tokenId) == address(this), "Contract not approved to sell NFT");
-        require(nftStatuses[tokenId] == NFTStatus.owned, "Already for sell");
         _;
     }
 
     function setETHSwapOrder(uint256 tokenId, uint256 price) external checkSell(tokenId) {
-        require(price > 0, "Must set a solid price");        
-        nftStatuses[tokenId] = NFTStatus.ethSwap;
+        require(tokenSwaps[tokenId].seller == address(0), "Already for sell by ABCoin");
+        require(auctions[tokenId].seller == address(0), "Already for sell in auction");
+        require(price > 0, "Must set a solid price");
+
         ethSwaps[tokenId] = Swap(
             msg.sender,
             tokenId,
@@ -52,8 +54,10 @@ contract Market is NFTMarket{
     }
 
     function setTokenSwapOrder(uint256 tokenId, uint256 price) external checkSell(tokenId) {
+        require(ethSwaps[tokenId].seller == address(0), "Already for sell by ETH");
+        require(auctions[tokenId].seller == address(0), "Already for sell in auction");
         require(price > 0, "Must set a solid price");
-        nftStatuses[tokenId] = NFTStatus.tokenSwap;
+
         tokenSwaps[tokenId] = Swap(
             msg.sender,
             tokenId,
@@ -77,7 +81,10 @@ contract Market is NFTMarket{
         uint256 duration
     ) external checkSell(tokenId) {
         
-        nftStatuses[tokenId] = NFTStatus.inAuction;
+        require(ethSwaps[tokenId].seller == address(0), "Already for sell by ETH");
+        require(tokenSwaps[tokenId].seller == address(0), "Already for sell by ABCoin");
+        require(minimumPrice > 0, "Must set a solid minimum price");
+
         uint256 endTime = block.timestamp + duration;
 
         auctions[tokenId] = Auction({
