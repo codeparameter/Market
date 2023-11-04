@@ -71,9 +71,8 @@ contract DealMaker is Exchange{
             }            
         }
 
-        // lock weis to match later
+
         if(buyRequest.tokenAmount > 0){
-            payable(address(this)).transfer(buyRequest.weiAmount);
             storeBuyRequest(buyRequest);
         }
     }
@@ -142,7 +141,7 @@ contract DealMaker is Exchange{
 
         // lock tokens to match later
         if(sellRequest.weiAmount > 0){
-            abcoin.transfer(address(this), sellRequest.tokenAmount);
+            abcoin.transferFrom(sellRequest.user, address(this), sellRequest.tokenAmount);
             storeSellRequest(sellRequest);
         }
     }
