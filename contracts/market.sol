@@ -67,10 +67,10 @@ contract Market is NFTMarket{
     function swapToken(uint256 tokenId) external{
         Swap storage swap = ethSwaps[tokenId];
 
-        // uint256 price = swap.price;
-        // require(abcoin.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
+        uint256 price = swap.price;
+        require(abcoin.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
 
-        // abcoin.transferFrom(msg.sender, swap.seller, swap.price);
+        abcoin.transferFrom(msg.sender, swap.seller, swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
     }
 
@@ -104,14 +104,15 @@ contract Market is NFTMarket{
     function bid(uint256 tokenId) external payable {
         Auction storage auction = auctions[tokenId];
         require(block.timestamp < auction.endTime, "Auction already ended");
+
+        uint256 bidAmount = bidding[tokenId][msg.sender] + msg.value;
         require(msg.sender != auction.seller, "You are the seller!");
-        require(msg.value >= auction.minimumPrice, "Bid must be higher than minimum price");
-        require(msg.value > auction.highestBid, "Bid must be higher than current highest bid");
+        require(bidAmount >= auction.minimumPrice, "Bid must be higher than minimum price");
+        require(bidAmount > auction.highestBid, "Bid must be higher than current highest bid");
 
         auction.highestBidder = msg.sender;
-        auction.highestBid = msg.value;
-        payable(address(this)).transfer(msg.value);
-        bidding[tokenId][msg.sender] = auction.highestBid;
+        auction.highestBid = bidAmount;
+        bidding[tokenId][msg.sender] = bidAmount;
     }
 
     function endAuction(uint256 tokenId) external {
@@ -129,7 +130,11 @@ contract Market is NFTMarket{
 
     function payBack(uint256 tokenId) external{
         Auction storage auction = auctions[tokenId];
-        require(auction.ended, "Auction not yet ended");
+        require(auction.highestBidder != msg.sender, 
+            "You can't cancel your bid unless someone bid higher than you");
+        // customize err msg:
+        require(bidding[tokenId][msg.sender] > 0, "You did'nt bid at all");
         payable(msg.sender).transfer(bidding[tokenId][msg.sender]);
+        bidding[tokenId][msg.sender] = 0;
     }
 }
