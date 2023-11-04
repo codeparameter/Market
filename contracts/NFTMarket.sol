@@ -18,6 +18,7 @@ contract NFTMarket {
         uint256 newItemId = tokenIds.current();
         nftm.nftMint(msg.sender, newItemId);
         nftm.setTokenURI(newItemId, tokenURI);
+        nftm.approve(address(this), newItemId);
         return newItemId;
     }    
 
@@ -28,9 +29,5 @@ contract NFTMarket {
 
     function getLastNFT() external view returns (uint256) {
         return tokenIds.current();
-    }
-
-    function approve(address to, uint256 tokenId) external  {
-        nftm.approve(to, tokenId);
     }
 }

@@ -28,7 +28,6 @@ contract Market is NFTMarket{
 
     modifier checkSell(uint256 tokenId){
         require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
-        require(nftm.getApproved(tokenId) == address(this), "Contract not approved to sell NFT");
         _;
     }
 
