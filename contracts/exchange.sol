@@ -1,42 +1,45 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./token.sol";
+import "./ownable.sol";
+import "./abCoin.sol";
 import "./marketInterface.sol";
 
 
-contract Exchange is ABCoin {
+contract Exchange is Ownable{
 
     event BuyRequestStored(
-        address indexed buyer, 
-        uint256 indexed weiAmount, 
-        uint256 indexed tokenAmunt);
+        address buyer, 
+        uint256 weiAmount, 
+        uint256 tokenAmunt);
 
     event BuyRequestShrinked(
-        address indexed buyer, 
-        uint256 indexed newWeiAmount, 
-        uint256 indexed newTokenAmunt);
+        address buyer, 
+        uint256 newWeiAmount, 
+        uint256 newTokenAmunt);
 
     event BuyRequestMatched(
-        address indexed buyer, 
-        uint256 indexed lastWeiAmount, 
-        uint256 indexed lastTokenAmunt);
+        address buyer, 
+        uint256 lastWeiAmount, 
+        uint256 lastTokenAmunt);
 
     event SellRequestStored(
-        address indexed seller, 
-        uint256 indexed weiAmount, 
-        uint256 indexed tokenAmunt);
+        address seller, 
+        uint256 weiAmount, 
+        uint256 tokenAmunt);
 
     event SellRequestShrinked(
-        address indexed seller, 
-        uint256 indexed newWeiAmount, 
-        uint256 indexed newTokenAmunt);
+        address seller, 
+        uint256 newWeiAmount, 
+        uint256 newTokenAmunt);
 
     event SellRequestMatched(
-        address indexed seller, 
-        uint256 indexed lastWeiAmount, 
-        uint256 indexed lastTokenAmunt);
+        address seller, 
+        uint256 lastWeiAmount, 
+        uint256 lastTokenAmunt);
 
+
+    ABCoin abcoin = new ABCoin();
     ExchangeRequest[] public buyRequests;
     ExchangeRequest[] public sellRequests;
 

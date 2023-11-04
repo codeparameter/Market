@@ -49,7 +49,7 @@ contract DealMaker is Exchange{
                 closeSellRequest(sellRequest, i);
 
                 // transfer to buyer now (without lock)
-                transfer(buyRequest.user, sellRequest.tokenAmount);
+                abcoin.transfer(buyRequest.user, sellRequest.tokenAmount);
                 buyRequest = shrinkBuyRequest(
                     buyRequest, sellRequest.weiAmount, sellRequest.tokenAmount, buyRI);
 
@@ -68,7 +68,7 @@ contract DealMaker is Exchange{
                     closeSellRequest(sellRequest, i);
                 
                 // transfer to buyer now (without lock)
-                transfer(buyRequest.user, buyRequest.tokenAmount);
+                abcoin.transfer(buyRequest.user, buyRequest.tokenAmount);
                 closeBuyRequest(buyRequest, buyRI);
 
                 return ;
@@ -91,7 +91,7 @@ contract DealMaker is Exchange{
     function submitSellRequest(uint256 tokenAmount, uint256 weiAmount, bool allAtOnce) external {
         require(tokenAmount > 0, "Invalid token amount");
         require(weiAmount > 0, "Invalid ETH amount");
-        require(balanceOf(msg.sender) > 0, "Insufficiant token amount");
+        require(abcoin.balanceOf(msg.sender) > 0, "Insufficiant token amount");
 
         ExchangeRequest memory sellRequest = ExchangeRequest(
             msg.sender, 
@@ -120,7 +120,7 @@ contract DealMaker is Exchange{
             if(sellRequest.weiAmount > buyRequest.weiAmount){
                 
                 uint256 weiAmount= transferWei(buyRequest, sellRequest, buyRequest.tokenAmount);
-                transferFrom(sellRequest.user, buyRequest.user, buyRequest.tokenAmount);
+                abcoin.transferFrom(sellRequest.user, buyRequest.user, buyRequest.tokenAmount);
                 closeBuyRequest(buyRequest, i);
                 
                 sellRequest = shrinkSellRequest(
@@ -134,7 +134,7 @@ contract DealMaker is Exchange{
             else{
 
                 uint256 weiAmount = transferWei(buyRequest, sellRequest, sellRequest.tokenAmount);        
-                transferFrom(sellRequest.user, buyRequest.user, sellRequest.tokenAmount);
+                abcoin.transferFrom(sellRequest.user, buyRequest.user, sellRequest.tokenAmount);
 
                 if(sellRequest.weiAmount < buyRequest.weiAmount)
                     shrinkBuyRequest(buyRequest, weiAmount, sellRequest.tokenAmount, i);
@@ -149,7 +149,7 @@ contract DealMaker is Exchange{
 
         // lock tokens to match later
         if(sellRequest.weiAmount > 0)
-            transfer(address(this), sellRequest.tokenAmount);
+            abcoin.transfer(address(this), sellRequest.tokenAmount);
     }
 
 }
