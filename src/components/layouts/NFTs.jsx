@@ -1,5 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 const NFTs = () => {
-	return <div>NFTs</div>;
+	return <Outlet />;
 };
 
 export default NFTs;

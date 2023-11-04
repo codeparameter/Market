@@ -2,7 +2,7 @@ import { chakra, Checkbox, Heading, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import CustomNumberInput from "./common/CustomNumberInput";
 
-const TokenForm = () => {
+const TokenForm = ({type}) => {
 	const [tokenAmount, setTokenAmount] = useState(0);
 	const [weiAmount, setWeiAmount] = useState(0);
 	const [allAtOnceChecked, setAllAtOnceChecked] = useState(true);
@@ -12,7 +12,7 @@ const TokenForm = () => {
 
 	return (
 		<chakra.form sx={{ display: "flex", flexDir: "column", gap: "16px" }}>
-			<Heading>Token</Heading>
+			<Heading textTransform="capitalize">{type} token</Heading>
 			<CustomNumberInput
 				value={tokenAmount}
 				setValue={setTokenAmount}
@@ -30,7 +30,7 @@ const TokenForm = () => {
 				All At Once
 			</Checkbox>
 			<Button colorScheme="teal" size="lg" type="submit">
-				{formState ? "Buy Token" : "Sell Token"}
+				{type === 'buy' ? "Buy Token" : "Sell Token"}
 			</Button>
 		</chakra.form>
 	);

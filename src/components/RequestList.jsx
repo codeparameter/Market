@@ -1,15 +1,21 @@
 import {
+	Heading,
 	Table,
-	TableCaption,
 	TableContainer,
 	Tbody,
 	Td,
 	Tfoot,
 	Th,
 	Thead,
-	Tr,
+	Tr
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+
+const formHeadingStyle = {
+	textTransform: "capitalize",
+	fontSize: "1.5rem",
+	my: "1.5rem"
+};
 
 const RequestList = ({ type }) => {
 	const [list, setList] = useState([]);
@@ -59,11 +65,16 @@ const RequestList = ({ type }) => {
 
 	return (
 		<TableContainer>
+			<Heading as="h3" sx={formHeadingStyle}>
+				{type} requests
+			</Heading>
 			<Table variant="striped" colorScheme="teal" size="sm">
 				<Thead>
 					<Tr>
 						{headers.map(item => (
-							<Th key={item} textAlign="center">{item}</Th>
+							<Th key={item} textAlign="center">
+								{item}
+							</Th>
 						))}
 					</Tr>
 				</Thead>
@@ -75,7 +86,9 @@ const RequestList = ({ type }) => {
 				<Tfoot>
 					<Tr>
 						{headers.map(item => (
-							<Th key={item} textAlign="center">{item}</Th>
+							<Th key={item} textAlign="center">
+								{item}
+							</Th>
 						))}
 					</Tr>
 				</Tfoot>
@@ -99,7 +112,7 @@ const Request = ({ user, tokenAmount, weiAmount, rate, allAtOnce }) => {
 			<Td textAlign="center">{tokenAmount}</Td>
 			<Td textAlign="center">{weiAmount}</Td>
 			<Td textAlign="center">{rate}</Td>
-			<Td textAlign="center">{allAtOnce ? 'yes' : 'no'}</Td>
+			<Td textAlign="center">{allAtOnce ? "yes" : "no"}</Td>
 		</Tr>
 	);
 };

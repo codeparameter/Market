@@ -10,13 +10,16 @@ import Landing from "./components/pages/Landing";
 import NFTs from "./components/layouts/NFTs";
 import Sell from "./components/pages/Sell";
 import Token from "./components/layouts/Token";
+import CreateNftForm from "./components/CreateNftForm";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Root />}>
 			<Route index element={<Landing />} />
 			<Route path="token" element={<Token />} />
-			<Route path="nft" element={<NFTs />} />
+			<Route path="nft" element={<NFTs />}>
+        <Route path="create" element={<CreateNftForm />} />
+      </Route>
 			<Route path="buy" element={<Buy />} />
 			<Route path="sell" element={<Sell />} />
 		</Route>
