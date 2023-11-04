@@ -85,7 +85,7 @@ contract Market is NFTMarket{
         require(tokenSwaps[tokenId].seller == address(0), "Already for sell by ABCoin");
         require(minimumPrice > 0, "Must set a solid minimum price");
 
-        uint256 endTime = block.timestamp + duration;
+        uint256 endTime = block.timestamp + duration * 1 days;
 
         auctions[tokenId] = Auction({
             seller: msg.sender,

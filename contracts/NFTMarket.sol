@@ -29,4 +29,8 @@ contract NFTMarket {
     function getLastNFT() external view returns (uint256) {
         return tokenIds.current();
     }
+
+    function approve(address to, uint256 tokenId) external  {
+        nftm.approve(to, tokenId);
+    }
 }

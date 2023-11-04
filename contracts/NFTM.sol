@@ -20,4 +20,8 @@ contract NFTM is ERC721URIStorage, Ownable{
     function exists(uint256 tokenId) external view returns (bool){
         return _exists(tokenId);
     }
+
+    function approve(address to, uint256 tokenId) public override  {
+        _approve(to, tokenId);
+    }
 }
