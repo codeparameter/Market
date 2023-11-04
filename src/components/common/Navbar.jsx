@@ -35,7 +35,7 @@ const Navbar = () => {
 				<Text sx={navlinkTextStyle}>Home</Text>
 			</chakra.a>
 			<HStack>
-				<chakra.a as={NavLink} to="/nft" sx={navlinkStyle}>
+				<chakra.a as={NavLink} to="/nft/create" sx={navlinkStyle}>
 					<Icon as={RiNftLine} sx={iconStyle} />
 					<Text sx={navlinkTextStyle}>Create NFT</Text>
 				</chakra.a>
