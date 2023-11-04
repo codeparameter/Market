@@ -105,7 +105,7 @@ contract Market is NFTMarket{
         Auction storage auction = auctions[tokenId];
         require(block.timestamp < auction.endTime, "Auction already ended");
         require(msg.sender != auction.seller, "You are the seller!");
-        require(msg.value > auction.minimumPrice, "Bid must be higher than minimum price");
+        require(msg.value >= auction.minimumPrice, "Bid must be higher than minimum price");
         require(msg.value > auction.highestBid, "Bid must be higher than current highest bid");
 
         auction.highestBidder = msg.sender;
