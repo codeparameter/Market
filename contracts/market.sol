@@ -68,10 +68,10 @@ contract Market is NFTMarket{
     function swapToken(uint256 tokenId) external{
         Swap storage swap = ethSwaps[tokenId];
 
-        uint256 price = swap.price;
-        require(abcoin.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
+        // uint256 price = swap.price;
+        // require(abcoin.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
 
-        abcoin.transferFrom(msg.sender, swap.seller, swap.price);
+        // abcoin.transferFrom(msg.sender, swap.seller, swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
     }
 

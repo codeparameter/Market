@@ -5,7 +5,8 @@ import "./NFTM.sol";
 import "./dealmaker.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/utils/Counters.sol";
 
-contract NFTMarket is DealMaker {
+// contract NFTMarket is DealMaker {
+contract NFTMarket {
 
     NFTM public nftm = new NFTM();
 

@@ -26,12 +26,12 @@ contract DealMaker is Exchange{
             weiAmount / tokenAmount, 
             allAtOnce
             );
-
-        uint256 buyRI = storeBuyRequest(buyRequest);
-        matchSellRequest(buyRequest, buyRI);
+            
+        matchSellRequest(buyRequest);
     }
 
-    function matchSellRequest(ExchangeRequest memory buyRequest, uint256 buyRI) internal {
+    function matchSellRequest(ExchangeRequest memory buyRequest) internal{
+
         ExchangeRequest memory sellRequest;
         for (uint256 i = sellRequests.length - 1; i >= 0; i--){
             sellRequest = sellRequests[i];
@@ -50,34 +50,32 @@ contract DealMaker is Exchange{
 
                 // transfer to buyer now (without lock)
                 abcoin.transfer(buyRequest.user, sellRequest.tokenAmount);
-                buyRequest = shrinkBuyRequest(
-                    buyRequest, sellRequest.weiAmount, sellRequest.tokenAmount, buyRI);
+                
+                buyRequest.weiAmount -= sellRequest.weiAmount;
+                buyRequest.tokenAmount -= sellRequest.tokenAmount;
 
-                if(buyRequest.tokenAmount == 0){
-                    closeBuyRequest(buyRequest, buyRI);
-                    return ;
-                }
             }
             else{
 
                 uint256 weiAmount = transferWei(buyRequest, sellRequest, buyRequest.tokenAmount);
                         
                 if(buyRequest.tokenAmount < sellRequest.tokenAmount)
-                    shrinkSellRequest(sellRequest, weiAmount, buyRequest.tokenAmount, i);
+                    shrinkSellRequest(weiAmount, buyRequest.tokenAmount, i);
                 else // ==
                     closeSellRequest(sellRequest, i);
                 
                 // transfer to buyer now (without lock)
                 abcoin.transfer(buyRequest.user, buyRequest.tokenAmount);
-                closeBuyRequest(buyRequest, buyRI);
 
                 return ;
             }            
         }
 
         // lock weis to match later
-        if(buyRequest.tokenAmount > 0)
+        if(buyRequest.tokenAmount > 0){
             payable(address(this)).transfer(buyRequest.weiAmount);
+            storeBuyRequest(buyRequest);
+        }
     }
 
     // 
@@ -100,12 +98,11 @@ contract DealMaker is Exchange{
             weiAmount / tokenAmount, 
             allAtOnce
             );
-
-        uint256 sellRI = storeSellRequest(sellRequest);
-        matchBuyRequest(sellRequest, sellRI);
+            
+        matchBuyRequest(sellRequest);
     }
 
-    function matchBuyRequest(ExchangeRequest memory sellRequest, uint256 sellRI) internal {
+    function matchBuyRequest(ExchangeRequest memory sellRequest) internal {
         ExchangeRequest memory buyRequest;
         for (uint256 i = buyRequests.length - 1; i >= 0; i--){
             buyRequest = buyRequests[i];
@@ -122,14 +119,10 @@ contract DealMaker is Exchange{
                 uint256 weiAmount= transferWei(buyRequest, sellRequest, buyRequest.tokenAmount);
                 abcoin.transferFrom(sellRequest.user, buyRequest.user, buyRequest.tokenAmount);
                 closeBuyRequest(buyRequest, i);
-                
-                sellRequest = shrinkSellRequest(
-                    sellRequest, weiAmount, buyRequest.tokenAmount, sellRI);
 
-                if(sellRequest.weiAmount == 0){
-                    closeSellRequest(sellRequest, sellRI);
-                    return ;
-                }
+                sellRequest.weiAmount -= weiAmount;
+                sellRequest.tokenAmount -= buyRequest.tokenAmount;
+                
             }
             else{
 
@@ -137,7 +130,7 @@ contract DealMaker is Exchange{
                 abcoin.transferFrom(sellRequest.user, buyRequest.user, sellRequest.tokenAmount);
 
                 if(sellRequest.weiAmount < buyRequest.weiAmount)
-                    shrinkBuyRequest(buyRequest, weiAmount, sellRequest.tokenAmount, i);
+                    shrinkBuyRequest(weiAmount, sellRequest.tokenAmount, i);
                 else // ==
                     closeBuyRequest(buyRequest, i);
                 
@@ -148,8 +141,10 @@ contract DealMaker is Exchange{
         }
 
         // lock tokens to match later
-        if(sellRequest.weiAmount > 0)
+        if(sellRequest.weiAmount > 0){
             abcoin.transfer(address(this), sellRequest.tokenAmount);
+            storeSellRequest(sellRequest);
+        }
     }
 
 }

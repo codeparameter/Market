@@ -4,14 +4,6 @@ pragma solidity ^0.8.0;
 import "./ownable.sol";
 import "./abCoin.sol";
 
-struct ExchangeRequest {
-    address user;
-    uint256 tokenAmount;
-    uint256 weiAmount;
-    uint256 rate; // wei per token
-    bool allAtOnce;
-}
-
 contract Exchange is Ownable{
 
     event BuyRequestStored(
@@ -44,6 +36,13 @@ contract Exchange is Ownable{
         uint256 lastWeiAmount, 
         uint256 lastTokenAmunt);
 
+    struct ExchangeRequest {
+        address user;
+        uint256 tokenAmount;
+        uint256 weiAmount;
+        uint256 rate; // wei per token
+        bool allAtOnce;
+    }
 
     ABCoin abcoin = new ABCoin();
     ExchangeRequest[] public buyRequests;
@@ -53,7 +52,7 @@ contract Exchange is Ownable{
     function createABCoin(address account, uint256 amount) external onlyOwner{
         abcoin.mint(account, amount);
     }
-    
+
 
     // 
     // 
@@ -85,22 +84,19 @@ contract Exchange is Ownable{
     }
 
     function shrinkBuyRequest(
-        ExchangeRequest memory buyRequest,
         uint256 shrinkWeiAmount,
         uint256 shrinkTokenAmount,
-        uint256 index) internal returns (ExchangeRequest memory) {
+        uint256 index) internal {
+
+        ExchangeRequest storage buyRequest = buyRequests[index];
 
         buyRequest.weiAmount -= shrinkWeiAmount;
         buyRequest.tokenAmount -= shrinkTokenAmount;
-
-        buyRequests[index] = buyRequest;
 
         emit BuyRequestShrinked(
             buyRequest.user, 
             buyRequest.weiAmount, 
             buyRequest.tokenAmount);
-        
-        return buyRequest;
     }
 
     function closeBuyRequest(
@@ -147,22 +143,19 @@ contract Exchange is Ownable{
     }
 
     function shrinkSellRequest(
-        ExchangeRequest memory sellRequest,
         uint256 shrinkWeiAmount,
         uint256 shrinkTokenAmount,
-        uint256 index) internal returns (ExchangeRequest memory) {
+        uint256 index) internal {
+
+        ExchangeRequest storage sellRequest = sellRequests[index];
 
         sellRequest.weiAmount -= shrinkWeiAmount;
         sellRequest.tokenAmount -= shrinkTokenAmount;
-
-        sellRequests[index] = sellRequest;
 
         emit SellRequestShrinked(
             sellRequest.user, 
             sellRequest.weiAmount, 
             sellRequest.tokenAmount);
-
-        return  sellRequest;
     }
 
     function closeSellRequest(
