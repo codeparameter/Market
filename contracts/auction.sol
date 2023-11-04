@@ -28,6 +28,8 @@ contract AuctionContract is NFTMarket{
     mapping(uint256 => Auction) public auctions;
     mapping(uint256 => mapping(address => uint256)) public bidding;
 
+    constructor(address _nftm) NFTMarket(_nftm) {}
+
     modifier checkSell(uint256 tokenId){
         require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
         _;

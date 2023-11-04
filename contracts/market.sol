@@ -2,8 +2,15 @@
 pragma solidity ^0.8.0;
 
 import "./auction.sol";
+import "./abCoin.sol";
 
 contract Market is AuctionContract{
+
+    ABCoin public abcoin;
+
+    constructor (address abc, address _nftm) AuctionContract(_nftm){
+        abcoin = ABCoin(abc);
+    }
 
     //
     // NFT <-> ETH

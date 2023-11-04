@@ -5,6 +5,7 @@ import "./exchange.sol";
 
 contract DealMaker is Exchange{
 
+    constructor(address abcoin) Exchange(abcoin) {}
     
     // 
     // 

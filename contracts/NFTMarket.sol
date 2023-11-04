@@ -4,11 +4,14 @@ pragma solidity ^0.8.0;
 import "./NFTM.sol";
 import "./dealmaker.sol";
 
-contract NFTMarket is DealMaker {
+contract NFTMarket {
 
-    NFTM public nftm = new NFTM();
-    
+    NFTM public nftm;
     uint256 public tokenIds;
+
+    constructor(address _nftm){
+        nftm = NFTM(_nftm);
+    }
 
     modifier validTokenId(uint256 tokenId){
         require(tokenId > 0 && tokenId <= tokenIds, "Token ID does not exist");
