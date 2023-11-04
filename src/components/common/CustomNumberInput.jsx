@@ -15,7 +15,6 @@ const CustomNumberInput = ({ label, value, setValue }) => {
 			<NumberInput
 				value={value}
 				onChange={value => setValue(+value)}
-				precision={2}
 				step={1}
 				min={0}
 			>

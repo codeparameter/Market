@@ -4,7 +4,7 @@ import { Box, Container } from "@chakra-ui/react";
 
 const Root = () => {
 	return (
-		<Container maxW="1200px">
+		<Container maxW="1400px">
 			<Navbar />
 			<Outlet />
 		</Container>

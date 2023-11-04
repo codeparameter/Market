@@ -10,14 +10,17 @@ const Token = () => {
 			gap={6}
 			py={6}
 		>
-			<GridItem colSpan={2}>
-				<TokenForm />
+			<GridItem>
+				<TokenForm type={'buy'} />
+			</GridItem>
+      <GridItem>
+				<TokenForm type={'sell'} />
 			</GridItem>
 			<GridItem>
-				<RequestList />
+				<RequestList type={'buy'} />
 			</GridItem>
 			<GridItem>
-				<RequestList />
+				<RequestList type={'sell'} />
 			</GridItem>
 		</Grid>
 	);
