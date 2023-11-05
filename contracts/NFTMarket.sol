@@ -16,7 +16,7 @@ contract NFTMarket {
     }
 
     modifier validTokenId(uint256 tokenId){
-        require(tokenId > 0 && tokenId <= tokenIds, "Token ID does not exist");
+        require(nftm.exists(tokenId), "Token ID does not exist");
         _;
     }
 
