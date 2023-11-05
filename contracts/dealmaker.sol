@@ -15,16 +15,15 @@ contract DealMaker is Exchange{
     // 
     // 
 
-    function submitBuyRequest(uint256 tokenAmount, uint256 weiAmount, bool allAtOnce) payable external {
+    function submitBuyRequest(uint256 tokenAmount, bool allAtOnce) payable external {
         require(tokenAmount > 0, "Invalid token amount");
-        require(weiAmount > 0, "Invalid Wei amount");
         require(msg.value > 0, "Insufficiant Wei amount");
 
         ExchangeRequest memory buyRequest = ExchangeRequest(
             msg.sender, 
             tokenAmount, 
-            weiAmount, 
-            weiAmount / tokenAmount, 
+            msg.value, 
+            msg.value / tokenAmount, 
             allAtOnce
             );
             
@@ -89,7 +88,7 @@ contract DealMaker is Exchange{
     function submitSellRequest(uint256 tokenAmount, uint256 weiAmount, bool allAtOnce) external {
         require(tokenAmount > 0, "Invalid token amount");
         require(weiAmount > 0, "Invalid ETH amount");
-        require(abcoin.balanceOf(msg.sender) > 0, "Insufficiant token amount");
+        require(abcoin.balanceOf(msg.sender) >= tokenAmount, "Insufficiant token amount");
 
         ExchangeRequest memory sellRequest = ExchangeRequest(
             msg.sender, 
