@@ -1,20 +1,35 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button, chakra } from "@chakra-ui/react";
 import CustomFileInput from "./common/CustomFileInput";
 import { useNavigate } from "react-router-dom";
+import { nftContext } from "../context/NftContext";
 
-const submitButtonStyle = { bg: "cyan.700", color: "white", w: "full" };
+const submitButtonStyle = {
+	bg: "cyan.700",
+	color: "white",
+	w: "full",
+	_disabled: {
+		bg: "gray.400",
+		cursor: "not-allowed",
+		_hover: { bg: "gray.400" }
+	}
+};
+
+const randomInt = () => {
+  return Math.floor(Math.random() * 100 + 1)
+}
 
 const CreateNftForm = () => {
 	const [image, setImage] = useState(null);
 	const [fileName, setFileName] = useState("No selected file");
-  const nav = useNavigate()
+  const {addNft} = useContext(nftContext)
+	const nav = useNavigate();
 
 	const handleChange = ({ target: { files } }) => {
 		files[0] && setFileName(files[0].name);
 		if (files) {
 			setImage(URL.createObjectURL(files[0]));
-      console.log(URL.createObjectURL(files[0]));
+			console.log(URL.createObjectURL(files[0]));
 		}
 	};
 
@@ -23,24 +38,28 @@ const CreateNftForm = () => {
 		setImage(null);
 	};
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // const nftId = await fetch()
-    // nav(`/ntf/${nftId}`)
-  }
+	const handleSubmit = async e => {
+		e.preventDefault();
+		if (!image) return;
+		// const nftId = await fetch()
+    addNft({id: randomInt(), urlObject: image})
+		nav(`/`);
+	};
 
 	return (
-		<chakra.form sx={{ w: "400px", m: "2rem auto" }}>
-			<CustomFileInput
-				image={image}
-				fileName={fileName}
-				handleChange={handleChange}
-				handleDelete={handleDelete}
-			/>
-			<Button type="submit" sx={submitButtonStyle}>
-				Mint
-			</Button>
-		</chakra.form>
+		<>
+			<chakra.form sx={{ w: "400px", m: "2rem auto" }} onSubmit={handleSubmit}>
+				<CustomFileInput
+					image={image}
+					fileName={fileName}
+					handleChange={handleChange}
+					handleDelete={handleDelete}
+				/>
+				<Button type="submit" sx={submitButtonStyle} isDisabled={!image}>
+					Mint
+				</Button>
+			</chakra.form>
+		</>
 	);
 };
 
