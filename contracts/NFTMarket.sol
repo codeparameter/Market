@@ -6,6 +6,8 @@ import "./dealmaker.sol";
 
 contract NFTMarket {
 
+    event NFTCreated(address owner, uint256 tokenId);
+
     NFTM public nftm;
     uint256 public tokenIds;
 
@@ -23,6 +25,7 @@ contract NFTMarket {
         nftm.nftMint(msg.sender, tokenIds);
         nftm.setTokenURI(tokenIds, tokenURI);
         nftm.approve(address(this), tokenIds);
+        emit NFTCreated(msg.sender, tokenIds);
     }
 
     function showNFT(uint256 tokenId) external view validTokenId(tokenId) returns (string memory) {

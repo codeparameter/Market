@@ -23,6 +23,36 @@ struct Auction {
 
 contract AuctionContract is NFTMarket{
 
+    event AuctionCreated(
+                        address seller,
+                        uint256 tokenId,
+                        uint256 minimumPrice,
+                        uint256 endTime
+                        );
+
+    event AuctionEnded(
+                        address seller,
+                        uint256 tokenId,
+                        uint256 minimumPrice,
+                        uint256 endTime,
+                        address highestBidder,
+                        uint256 highestBid  
+                        );
+
+    event AuctionBid(
+                        address seller,
+                        uint256 tokenId,
+                        address highestBidder,
+                        uint256 highestBid  
+                        );
+
+    event PayBack(
+                        address seller,
+                        address bidder,
+                        uint256 tokenId,
+                        uint256 amount
+                        );
+
     mapping(uint256 => Swap) public ethSwaps;
     mapping(uint256 => Swap) public tokenSwaps;
     mapping(uint256 => Auction) public auctions;
@@ -56,6 +86,13 @@ contract AuctionContract is NFTMarket{
             highestBid: 0,
             incomplete: true
         });
+
+        emit AuctionCreated({
+            seller: msg.sender,
+            tokenId: tokenId,
+            minimumPrice: minimumPrice,
+            endTime: endTime
+        });
     }
 
     function getAuction(uint256 tokenId) internal view returns (Auction storage){
@@ -75,6 +112,8 @@ contract AuctionContract is NFTMarket{
         auction.highestBidder = msg.sender;
         auction.highestBid = bidAmount;
         bidding[tokenId][msg.sender] = bidAmount;
+
+        emit AuctionBid(auction.seller, tokenId, msg.sender, bidAmount);
     }
 
     function endAuction(uint256 tokenId) external {
@@ -88,15 +127,28 @@ contract AuctionContract is NFTMarket{
             nftm.safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
             payable(auction.seller).transfer(auction.highestBid);
         }
+
+        emit AuctionEnded(
+                        auction.seller, 
+                        auction.tokenId, 
+                        auction.minimumPrice, 
+                        auction.endTime, 
+                        auction.highestBidder, 
+                        auction.highestBid
+                        );
     }
 
     function payBack(uint256 tokenId) external{
         Auction storage auction = getAuction(tokenId);
         require(auction.highestBidder != msg.sender, 
             "You can't cancel your bid unless someone bid higher than you");
-        // customize err msg:
+            
+        // customized err msg:
         require(bidding[tokenId][msg.sender] > 0, "You did'nt bid at all");
         payable(msg.sender).transfer(bidding[tokenId][msg.sender]);
+
+        emit PayBack(auction.seller, msg.sender, tokenId, bidding[tokenId][msg.sender]);
+
         bidding[tokenId][msg.sender] = 0;
     }
 }

@@ -6,6 +6,12 @@ import "./abCoin.sol";
 
 contract Market is AuctionContract{
 
+    event ETHSwapOrderSet(address seller, uint256 tokenId, uint256 price);
+    event ETHSwapOrderDone(address seller, address buyer, uint256 tokenId, uint256 price);
+
+    event TokenSwapOrderSet(address seller, uint256 tokenId, uint256 price);
+    event TokenSwapOrderDone(address seller, address buyer, uint256 tokenId, uint256 price);
+
     ABCoin public abcoin;
 
     constructor (address abc, address _nftm) AuctionContract(_nftm){
@@ -29,6 +35,8 @@ contract Market is AuctionContract{
             price,
             true
         );
+
+        emit ETHSwapOrderSet(msg.sender, tokenId, price);
     }
 
     function getETHSwap(uint256 tokenId) internal view returns (Swap storage){
@@ -45,6 +53,8 @@ contract Market is AuctionContract{
         payable(swap.seller).transfer(swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
         swap.incomplete = false;
+
+        emit ETHSwapOrderDone(swap.seller, msg.sender, tokenId, swap.price);
     }
 
     //
@@ -64,6 +74,8 @@ contract Market is AuctionContract{
             price,
             true
         );
+
+        emit TokenSwapOrderSet(msg.sender, tokenId, price);
     }
 
     function getTokenSwap(uint256 tokenId) internal view returns (Swap storage){
@@ -81,5 +93,7 @@ contract Market is AuctionContract{
         abcoin.transferFrom(msg.sender, swap.seller, swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
         swap.incomplete = false;
+
+        emit TokenSwapOrderDone(swap.seller, msg.sender, tokenId, swap.price);
     }
 }
