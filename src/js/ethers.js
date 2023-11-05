@@ -15,4 +15,23 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 // For this, you need the account signer...
 const signer = provider.getSigner();
 
-export { ethers, provider, signer };
+async function callMethodWithRevert(method, value, ...args) {
+  try {
+    // Estimate gas for the method
+    const estimatedGas = await method(...args).estimateGas();
+
+    // If estimation is successful, proceed with sending the transaction
+    const tx = await method(...args).send({ gasLimit: estimatedGas, value: value });
+
+    // Transaction successful, log transaction hash
+    console.log("Transaction hash:", tx.hash);
+  } catch (error) {
+    // Handle potential revert situation
+    console.error("Error:", error.message);
+    if (error.code === "CALL_EXCEPTION") {
+      console.log("Revert reason:", error.reason);
+    }
+  }
+}
+
+export { ethers, provider, signer, callMethodWithRevert };
