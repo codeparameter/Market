@@ -191,8 +191,13 @@ contract Exchange is Ownable{
         uint256 tokenAmount) 
         internal returns (uint256) {
 
-        uint256 buyerWei = fromBuyer.rate *  tokenAmount;
-        uint256 sellerWei = toSeller.rate *  tokenAmount;
+        uint256 buyerWei = fromBuyer.weiAmount;
+        uint256 sellerWei = toSeller.weiAmount;
+
+        if (tokenAmount < toSeller.tokenAmount){
+            buyerWei = fromBuyer.rate *  tokenAmount;
+            sellerWei = toSeller.rate *  tokenAmount;
+        }
 
         payable (toSeller.user).transfer(sellerWei);
         
