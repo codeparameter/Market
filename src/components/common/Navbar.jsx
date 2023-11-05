@@ -5,7 +5,10 @@ import {
 	RiNftLine,
 	RiMoneyDollarCircleLine,
 	RiShoppingCartLine,
-	RiHome8Line, RiTokenSwapFill
+	RiHome8Line,
+	RiTokenSwapFill,
+	RiAuctionLine,
+  RiSwapBoxLine
 } from "react-icons/ri";
 
 const navbarStyle = {
@@ -35,11 +38,15 @@ const Navbar = () => {
 				<Text sx={navlinkTextStyle}>Home</Text>
 			</chakra.a>
 			<HStack>
+        <chakra.a as={NavLink} to="/swap" sx={navlinkStyle}>
+					<Icon as={RiSwapBoxLine} sx={iconStyle} />
+					<Text sx={navlinkTextStyle}>Swap</Text>
+				</chakra.a>
 				<chakra.a as={NavLink} to="/nft/create" sx={navlinkStyle}>
 					<Icon as={RiNftLine} sx={iconStyle} />
 					<Text sx={navlinkTextStyle}>Create NFT</Text>
 				</chakra.a>
-        <chakra.a as={NavLink} to="/token" sx={navlinkStyle}>
+				<chakra.a as={NavLink} to="/token" sx={navlinkStyle}>
 					<Icon as={RiTokenSwapFill} sx={iconStyle} />
 					<Text sx={navlinkTextStyle}>token</Text>
 				</chakra.a>
@@ -50,6 +57,10 @@ const Navbar = () => {
 				<chakra.a as={NavLink} to="/sell" sx={navlinkStyle}>
 					<Icon as={RiMoneyDollarCircleLine} sx={iconStyle} />
 					<Text sx={navlinkTextStyle}>Sell</Text>
+				</chakra.a>
+				<chakra.a as={NavLink} to="/auctions" sx={navlinkStyle}>
+					<Icon as={RiAuctionLine} sx={iconStyle} />
+					<Text sx={navlinkTextStyle}>Auctions</Text>
 				</chakra.a>
 			</HStack>
 		</Flex>
