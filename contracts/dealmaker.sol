@@ -54,6 +54,8 @@ contract DealMaker is Exchange{
                 buyRequest.weiAmount -= sellRequest.weiAmount;
                 buyRequest.tokenAmount -= sellRequest.tokenAmount;
 
+                // emit shrink
+
             }
             else{
 
@@ -121,6 +123,8 @@ contract DealMaker is Exchange{
 
                 sellRequest.weiAmount -= weiAmount;
                 sellRequest.tokenAmount -= buyRequest.tokenAmount;
+
+                // emit shrink
                 
             }
             else{
