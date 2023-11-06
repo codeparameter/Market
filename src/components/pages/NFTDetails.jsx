@@ -1,16 +1,17 @@
 import {
-	chakra,
-	Box,
-	Flex,
-	Grid,
-	GridItem,
-	Heading,
-	Button,
-	HStack,
-	ButtonGroup
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  VStack,
+  chakra
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { nftContext } from "../../context/NftContext";
 import CustomNumberInput from "../common/CustomNumberInput";
 
@@ -27,10 +28,9 @@ const buttonRightStyle = { borderEndRadius: "lg", borderStartRadius: "0" };
 const NFTDetails = () => {
 	const { id } = useParams();
 	const [nft, setNft] = useState(null);
-	// const [value, setValue] = useState(0);
-  const [buyPrice, setBuyPrice] = useState(0)
-  const [sellPrice, setSellPrice] = useState(0)
-  const [auctionPrice, setAuctionPrice] = useState(0)
+	const [sellPrice, setSellPrice] = useState(0);
+	const [auctionPrice, setAuctionPrice] = useState(0);
+	const [auctionDuration, setAuctionDuration] = useState(0);
 	const { nfts } = useContext(nftContext);
 
 	useEffect(() => {
@@ -58,50 +58,53 @@ const NFTDetails = () => {
 					alt="NFT image source not found"
 				/>
 			</Box>
-			<Grid
-				flex="1"
-				templateColumns="repeat(2, 1fr)"
-				templateRows="repeat(2, 1fr)"
-				gap="4"
-			>
+			<Grid flex="1" maxW="400px" templateRows="repeat(3, auto)" gap="8">
 				<GridItem sx={formStyle}>
 					<Heading sx={headingStyle}>buy</Heading>
 					<HStack align="end">
-						<CustomNumberInput
-							label="Price"
-							value={buyPrice}
-							setValue={setBuyPrice}
-						/>
-						<ButtonGroup spacing="0">
-							<Button sx={buttonLeftStyle}>ETH</Button>
-							<Button sx={buttonRightStyle}>ABcoin</Button>
+						<ButtonGroup spacing="0" w="full">
+							<Button sx={buttonLeftStyle} colorScheme="telegram" flex="1">
+								ETH
+							</Button>
+							<Button sx={buttonRightStyle} colorScheme="teal" flex="1">
+								ABcoin
+							</Button>
 						</ButtonGroup>
 					</HStack>
 				</GridItem>
 				<GridItem sx={formStyle}>
 					<Heading sx={headingStyle}>sell</Heading>
-					<HStack align="end">
+					<VStack align="Stretch">
 						<CustomNumberInput
 							label="Price"
 							value={sellPrice}
 							setValue={setSellPrice}
 						/>
-						<ButtonGroup spacing="0">
-							<Button sx={buttonLeftStyle}>ETH</Button>
-							<Button sx={buttonRightStyle}>ABcoin</Button>
+						<ButtonGroup spacing="0" w="full">
+							<Button sx={buttonLeftStyle} colorScheme="telegram" flex="1">
+								ETH
+							</Button>
+							<Button sx={buttonRightStyle} colorScheme="teal" flex="1">
+								ABcoin
+							</Button>
 						</ButtonGroup>
-					</HStack>
+					</VStack>
 				</GridItem>
-				<GridItem colSpan="2" sx={formStyle}>
+				<GridItem sx={formStyle}>
 					<Heading sx={headingStyle}>create auction</Heading>
-					<HStack align="end">
+					<VStack align="stretch">
 						<CustomNumberInput
-							label="Price"
+							label="Minimum Price"
 							value={auctionPrice}
 							setValue={setAuctionPrice}
 						/>
-						<Button>Create Auction</Button>
-					</HStack>
+						<CustomNumberInput
+							label="Duration (days)"
+							value={auctionDuration}
+							setValue={setAuctionDuration}
+						/>
+						<Button colorScheme="telegram">Create Auction</Button>
+					</VStack>
 				</GridItem>
 			</Grid>
 		</Flex>
