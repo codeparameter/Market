@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { nftContext } from "../context/NftContext";
 
 const submitButtonStyle = {
-	bg: "cyan.700",
+	bg: "teal.500",
 	color: "white",
 	w: "full",
 	_disabled: {

@@ -24,7 +24,7 @@ const navlinkStyle = {
 	alignItems: "center",
 	gap: "6px",
 	p: "10px",
-	bg: "cyan.700",
+	bg: "teal.500",
 	borderRadius: "8px"
 };
 const iconStyle = { w: "24px", h: "24px" };
