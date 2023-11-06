@@ -13,10 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { RiCoinsLine } from "react-icons/ri";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { nftContext } from "../../context/NftContext";
 import CustomNumberInput from "../common/CustomNumberInput";
 import NftImg from "../common/NftImg";
+import { auctionsContext } from "../../context/AuctionsContext";
 
 const formStyle = {
 	borderRadius: "md"
@@ -28,23 +29,44 @@ const headingStyle = {
 const buttonLeftStyle = { borderEndRadius: "0", borderStartRadius: "lg" };
 const buttonRightStyle = { borderEndRadius: "lg", borderStartRadius: "0" };
 
+const calcEndTime = time => {
+	return time * 24 * 60 * 60 * 1000 + Date.now();
+};
+
 const NFTDetails = () => {
 	const { id } = useParams();
 	const [nft, setNft] = useState(null);
 	const [sellPrice, setSellPrice] = useState(0);
 	const [auctionPrice, setAuctionPrice] = useState(0);
-	const [auctionDuration, setAuctionDuration] = useState(0);
+	const [auctionDuration, setAuctionDuration] = useState(1);
 	const { nfts } = useContext(nftContext);
+	const { addAuction } = useContext(auctionsContext);
+	const nav = useNavigate();
 
 	useEffect(() => {
 		const nft = nfts.find(item => item.id.toString() === id);
 		setNft({ ...nft, price: 45 });
 	}, []);
 
+	const createAuction = () => {
+		if (!auctionPrice || !auctionDuration) return;
+		const data = {
+			seller: "asdfghjkl",
+			tokenId: id,
+			minimumPrice: auctionPrice,
+			endTime: calcEndTime(auctionDuration),
+			highestBidder: "lkjhgfdsa",
+			highestBid: 0,
+			ended: false
+		};
+		addAuction(data);
+		nav(`/auctions/${id}`);
+	};
+
 	return (
 		<Flex my={12} gap="4" align="start">
 			<VStack>
-				<NftImg imgSrc={nft?.urlObject}/>
+				<NftImg imgSrc={nft?.urlObject} />
 				<HStack fontSize="24px">
 					<RiCoinsLine />
 					<Text>{nft?.price}</Text>
@@ -95,7 +117,9 @@ const NFTDetails = () => {
 							value={auctionDuration}
 							setValue={setAuctionDuration}
 						/>
-						<Button colorScheme="telegram">Create Auction</Button>
+						<Button colorScheme="telegram" onClick={createAuction}>
+							Create Auction
+						</Button>
 					</VStack>
 				</GridItem>
 			</Grid>
