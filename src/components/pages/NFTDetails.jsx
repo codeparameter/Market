@@ -1,19 +1,22 @@
 import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  VStack,
-  chakra
+	Box,
+	Button,
+	ButtonGroup,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Heading,
+	Text,
+	VStack,
+	chakra
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
+import { RiCoinsLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import { nftContext } from "../../context/NftContext";
 import CustomNumberInput from "../common/CustomNumberInput";
+import NftImg from "../common/NftImg";
 
 const formStyle = {
 	borderRadius: "md"
@@ -34,30 +37,19 @@ const NFTDetails = () => {
 	const { nfts } = useContext(nftContext);
 
 	useEffect(() => {
-		const nft = nfts.find(item => item.id === +id);
-		setNft(nft);
+		const nft = nfts.find(item => item.id.toString() === id);
+		setNft({ ...nft, price: 45 });
 	});
 
 	return (
 		<Flex my={12} gap="4" align="start">
-			<Box
-				borderRadius="md"
-				maxW="300px"
-				bg="turquoise"
-				aspectRatio="1"
-				display="grid"
-				placeItems="center"
-				overflow="hidden"
-			>
-				<chakra.img
-					objectFit="cover"
-					w="full"
-					h="full"
-					display="block"
-					src={nft?.urlObject}
-					alt="NFT image source not found"
-				/>
-			</Box>
+			<VStack>
+				<NftImg imgSrc={nft?.urlObject}/>
+				<HStack fontSize="24px">
+					<RiCoinsLine />
+					<Text>{nft?.price}</Text>
+				</HStack>
+			</VStack>
 			<Grid flex="1" maxW="400px" templateRows="repeat(3, auto)" gap="8">
 				<GridItem sx={formStyle}>
 					<Heading sx={headingStyle}>buy</Heading>
