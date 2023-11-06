@@ -6,7 +6,6 @@ import NftImg from "../common/NftImg";
 
 const AuctionsList = () => {
 	const { nfts } = useContext(nftContext);
-	console.log(nfts);
 	const auctions = [
 		{
 			tokenId: 123,
@@ -23,7 +22,7 @@ const AuctionsList = () => {
 	];
 
 	const getNft = id => {
-		return nfts.find(item => (item.id = id));
+		return nfts.find(item => (item.id === id));
 	};
 
 	const getRemainingTime = (duration, createdAt) => {
