@@ -8,12 +8,8 @@ contract NFTMarket {
 
     event NFTCreated(address owner, uint256 tokenId);
 
-    NFTM public nftm;
+    NFTM public nftm = new NFTM();
     uint256 public tokenIds;
-
-    constructor(address _nftm){
-        nftm = NFTM(_nftm);
-    }
 
     modifier validTokenId(uint256 tokenId){
         require(nftm.exists(tokenId), "Token ID does not exist");

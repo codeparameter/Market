@@ -14,7 +14,7 @@ contract Market is AuctionContract{
 
     ABCoin public abcoin;
 
-    constructor (address abc, address _nftm) AuctionContract(_nftm){
+    constructor (address abc){
         abcoin = ABCoin(abc);
     }
 

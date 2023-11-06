@@ -4,8 +4,6 @@ pragma solidity ^0.8.0;
 import "./exchange.sol";
 
 contract DealMaker is Exchange{
-
-    constructor(address abcoin) Exchange(abcoin) {}
     
     // 
     // 
