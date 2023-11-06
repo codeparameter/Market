@@ -6,10 +6,7 @@ import "./dealmaker.sol";
 
 contract NFTMarket {
 
-    event NFTCreated(address owner, uint256 tokenId);
-
     NFTM public nftm = new NFTM();
-    uint256 public tokenIds;
 
     modifier validTokenId(uint256 tokenId){
         require(nftm.exists(tokenId), "Token ID does not exist");
@@ -17,11 +14,11 @@ contract NFTMarket {
     }
 
     function createNFT(string memory tokenURI) external{
-        tokenIds++;
-        nftm.nftMint(msg.sender, tokenIds);
-        nftm.setTokenURI(tokenIds, tokenURI);
-        nftm.approve(address(this), tokenIds);
-        emit NFTCreated(msg.sender, tokenIds);
+        nftm.nftMint(tokenURI);
+    }
+
+    function getLastNFT() external view returns (uint256){
+        return nftm.tokenIds();
     }
 
     function showNFT(uint256 tokenId) external view validTokenId(tokenId) returns (string memory) {

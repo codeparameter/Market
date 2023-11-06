@@ -6,11 +6,19 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTM is ERC721URIStorage, Ownable{
 
+    event NFTCreated(address owner, uint256 tokenId);
+
+    uint256 public tokenIds;
+
     constructor() ERC721("NFTMarket", "NFTM") {
     }   
 
-    function nftMint(address account, uint256 nextId) external onlyOwner {
-        _mint(account, nextId);
+    function nftMint(string memory tokenURI) external onlyOwner {
+        tokenIds++;
+        _mint(msg.sender, tokenIds);
+        _setTokenURI(tokenIds, tokenURI);
+        approve(address(this), tokenIds);
+        emit NFTCreated(msg.sender, tokenIds);
     } 
 
     function setTokenURI(uint256 newItemId, string memory _tokenURI) external onlyOwner {
@@ -18,10 +26,6 @@ contract NFTM is ERC721URIStorage, Ownable{
     }
 
     function exists(uint256 tokenId) external view returns (bool){
-        return _exists(tokenId);
-    }
-
-    function approve(address to, uint256 tokenId) public override  {
-        _approve(to, tokenId);
+        return tokenId > 0 && tokenId <= tokenIds;
     }
 }
