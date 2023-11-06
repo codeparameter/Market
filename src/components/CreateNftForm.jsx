@@ -3,6 +3,7 @@ import { Button, chakra } from "@chakra-ui/react";
 import CustomFileInput from "./common/CustomFileInput";
 import { useNavigate } from "react-router-dom";
 import { nftContext } from "../context/NftContext";
+import { v4 } from "uuid";
 
 const submitButtonStyle = {
 	bg: "teal.500",
@@ -14,10 +15,6 @@ const submitButtonStyle = {
 		_hover: { bg: "gray.400" }
 	}
 };
-
-const randomInt = () => {
-  return Math.floor(Math.random() * 100 + 1)
-}
 
 const CreateNftForm = () => {
 	const [image, setImage] = useState(null);
@@ -42,7 +39,7 @@ const CreateNftForm = () => {
 		e.preventDefault();
 		if (!image) return;
 		// const nftId = await fetch()
-    addNft({id: randomInt(), urlObject: image})
+    addNft({id: v4(), urlObject: image})
 		nav(`/`);
 	};
 
