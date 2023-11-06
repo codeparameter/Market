@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./ownable.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTM is ERC721URIStorage, Ownable{
 
