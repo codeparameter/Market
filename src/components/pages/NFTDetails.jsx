@@ -39,7 +39,7 @@ const NFTDetails = () => {
 	useEffect(() => {
 		const nft = nfts.find(item => item.id.toString() === id);
 		setNft({ ...nft, price: 45 });
-	});
+	}, []);
 
 	return (
 		<Flex my={12} gap="4" align="start">
