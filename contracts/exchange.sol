@@ -44,13 +44,9 @@ contract Exchange is Ownable{
         bool allAtOnce;
     }
 
-    ABCoin public abcoin;
+    ABCoin public abcoin = new ABCoin();
     ExchangeRequest[] public buyRequests;
     ExchangeRequest[] public sellRequests;
-
-    constructor (address abc){
-        abcoin = ABCoin(abc);
-    }    
 
     function createABCoin(address account, uint256 amount) external onlyOwner{
         abcoin.mint(account, amount);
