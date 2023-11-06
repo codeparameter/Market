@@ -6,7 +6,7 @@ const imgFormStyle = {
 	display: "grid",
 	placeContent: "center",
 	border: "1px",
-	borderColor: "cyan.700",
+	borderColor: "teal.500",
 	borderRadius: "8px",
 	w: "full",
 	aspectRatio: "1",
@@ -34,7 +34,7 @@ const CustomFileInput = ({ image, fileName, handleChange, handleDelete }) => {
 					<>
 						<Icon
 							as={MdCloudUpload}
-							sx={{ w: "40", h: "40", color: "cyan.700" }}
+							sx={{ w: "40", h: "40", color: "teal.500" }}
 						/>
 						<Text>Browse Files to upload</Text>
 					</>
