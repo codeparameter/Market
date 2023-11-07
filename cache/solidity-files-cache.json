@@ -266,7 +266,7 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\market.sol": {
-      "lastModificationDate": 1699351655964,
+      "lastModificationDate": 1699382620274,
       "contentHash": "64c181c23e4915977536f1605552c304",
       "sourceName": "contracts/market.sol",
       "solcConfig": {
@@ -305,7 +305,7 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\auction.sol": {
-      "lastModificationDate": 1699354045136,
+      "lastModificationDate": 1699382616940,
       "contentHash": "651496e9e8aff6564070afbdfe0dce42",
       "sourceName": "contracts/auction.sol",
       "solcConfig": {
@@ -343,7 +343,7 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\NFTMarket.sol": {
-      "lastModificationDate": 1699353510002,
+      "lastModificationDate": 1699382626627,
       "contentHash": "7812486c891940876f820283f0ec90b5",
       "sourceName": "contracts/NFTMarket.sol",
       "solcConfig": {
@@ -382,7 +382,7 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\NFTM.sol": {
-      "lastModificationDate": 1699354060163,
+      "lastModificationDate": 1699382623676,
       "contentHash": "be5ca7c64ffff01bc0dc92917193ca93",
       "sourceName": "contracts/NFTM.sol",
       "solcConfig": {

@@ -18,8 +18,7 @@ describe("market tests", () => {
     console.log('unique: ', owner.address);
     const lastId = createNFT(market, otherAccounts[0], 'test');
     await market.connect(otherAccounts[0]).createAuction(lastId, 100, 5);
-    const auction = market.auctions(lastId);
-    console.log(auction);
+    const auction = await market.auctions(lastId);
     expect(await market.showNFT(lastId)).to.equal('test');
   });
 });
