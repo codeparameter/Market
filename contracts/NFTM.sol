@@ -13,11 +13,11 @@ contract NFTM is ERC721URIStorage, Ownable{
     constructor() ERC721("NFTMarket", "NFTM") {
     }   
 
-    function nftMint(string memory tokenURI) external onlyOwner {
+    function nftMint(address nftOwner, string memory tokenURI) external onlyOwner {
         tokenIds++;
-        _mint(msg.sender, tokenIds);
+        _mint(nftOwner, tokenIds);
         _setTokenURI(tokenIds, tokenURI);
-        approve(address(this), tokenIds);
+        // approve(msg.sender, tokenIds);
         emit NFTCreated(msg.sender, tokenIds);
     }
 

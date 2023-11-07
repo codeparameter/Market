@@ -305,7 +305,7 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\auction.sol": {
-      "lastModificationDate": 1699351600744,
+      "lastModificationDate": 1699354045136,
       "contentHash": "651496e9e8aff6564070afbdfe0dce42",
       "sourceName": "contracts/auction.sol",
       "solcConfig": {
@@ -343,8 +343,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\NFTMarket.sol": {
-      "lastModificationDate": 1699300879028,
-      "contentHash": "0ec4ef8d02d52d554ec39c1dd0769556",
+      "lastModificationDate": 1699353510002,
+      "contentHash": "7812486c891940876f820283f0ec90b5",
       "sourceName": "contracts/NFTMarket.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -382,8 +382,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\NFTM.sol": {
-      "lastModificationDate": 1699300625553,
-      "contentHash": "e1b4a12a33592710bb2836356c74a3c0",
+      "lastModificationDate": 1699354060163,
+      "contentHash": "be5ca7c64ffff01bc0dc92917193ca93",
       "sourceName": "contracts/NFTM.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -1024,6 +1024,42 @@
       ],
       "artifacts": [
         "MarketInterface"
+      ]
+    },
+    "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\node_modules\\hardhat\\console.sol": {
+      "lastModificationDate": 1699295299218,
+      "contentHash": "896f68942c3a20e9ae3c3c5bfd3add54",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }

@@ -8,20 +8,20 @@ describe("market tests", () => {
 
   it("create NFT", async () => {
     const { market, otherAccounts } = await setUp();
-    await market.connect(otherAccounts[0]).createNFT("test");
-    const lastId = await market.getLastNFT();
-    expect(await market.showNFT(lastId)).to.equal("test");
+    const lastId = createNFT(market, otherAccounts[0], 'test');
+    expect(await market.showNFT(lastId)).to.equal('test');
   });
 
-//   it("create Auction", async () => {
-//     const { market, otherAccounts } = await setUp();
-//     await market.connect(otherAccounts[0]).createNFT("test2");
-//     const lastId = await market.getLastNFT();
-//     await market.connect(otherAccounts[0]).createAuction(lastId, 100, 5);
-//     const auction = market.auctions(lastId);
-//     console.log(auction);
-//     expect(await market.showNFT(lastId)).to.equal("test2");
-//   });
+  it("create Auction", async () => {
+    const { market, owner, otherAccounts } = await setUp();
+    console.log('unique: ', otherAccounts[0].address);
+    console.log('unique: ', owner.address);
+    const lastId = createNFT(market, otherAccounts[0], 'test');
+    await market.connect(otherAccounts[0]).createAuction(lastId, 100, 5);
+    const auction = market.auctions(lastId);
+    console.log(auction);
+    expect(await market.showNFT(lastId)).to.equal('test');
+  });
 });
 
 async function setUp() {
@@ -38,4 +38,10 @@ async function setUp() {
   const [owner, ...otherAccounts] = await ethers.getSigners();
 
   return { market, abcoin, owner, otherAccounts };
+}
+
+async function createNFT(market, signer, tokenURI){
+    await market.connect(signer).createNFT(tokenURI);
+    const lastId = await market.getLastNFT();
+    return lastId;
 }

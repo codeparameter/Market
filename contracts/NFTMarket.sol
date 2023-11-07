@@ -14,7 +14,7 @@ contract NFTMarket {
     }
 
     function createNFT(string memory tokenURI) external{
-        nftm.nftMint(tokenURI);
+        nftm.nftMint(msg.sender, tokenURI);
     }
 
     function getLastNFT() external view returns (uint256){
