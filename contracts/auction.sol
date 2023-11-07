@@ -57,21 +57,20 @@ contract AuctionContract is NFTMarket{
     mapping(uint256 => Auction) public auctions;
     mapping(uint256 => mapping(address => uint256)) public bidding;
 
-    modifier checkSell(uint256 tokenId){
+    modifier checkSell(uint256 tokenId, Status status){
         require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
         require(Statuses[tokenId] == Status.owned, "NFT already in sell");
         _;
+        Statuses[tokenId] = status;
     }
 
     function createAuction(
         uint256 tokenId,
         uint256 minimumPrice,
         uint256 duration
-    ) external validTokenId(tokenId) checkSell(tokenId) {
+    ) external validTokenId(tokenId) checkSell(tokenId, Status.auction) {
 
         require(minimumPrice > 0, "Must set a solid minimum price");
-        Statuses[tokenId] = Status.auction;
-
         uint256 endTime = block.timestamp + duration * 1 minutes;
 
         auctions[tokenId] = Auction({

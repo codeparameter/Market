@@ -32,9 +32,8 @@ contract Market is AuctionContract{
     //
 
     function setETHSwapOrder(uint256 tokenId, uint256 price) 
-        external validTokenId(tokenId) checkSell(tokenId) {
+        external validTokenId(tokenId) checkSell(tokenId, Status.ethSwap) {
         require(price > 0, "Must set a solid price");
-        Statuses[tokenId] = Status.ethSwap;
 
         ethSwaps[tokenId] = Swap(
             msg.sender,
@@ -71,10 +70,9 @@ contract Market is AuctionContract{
     //
 
     function setTokenSwapOrder(uint256 tokenId, uint256 price) 
-        external validTokenId(tokenId) checkSell(tokenId) {
+        external validTokenId(tokenId) checkSell(tokenId, Status.abcSwap) {
             
         require(price > 0, "Must set a solid price");
-        Statuses[tokenId] = Status.abcSwap;
 
         tokenSwaps[tokenId] = Swap(
             msg.sender,
