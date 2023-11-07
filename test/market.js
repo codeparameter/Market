@@ -14,12 +14,11 @@ describe("market tests", () => {
 
   it("create Auction", async () => {
     const { market, owner, otherAccounts } = await setUp();
-    console.log('unique: ', otherAccounts[0].address);
-    console.log('unique: ', owner.address);
     const lastId = createNFT(market, otherAccounts[0], 'test');
     await market.connect(otherAccounts[0]).createAuction(lastId, 100, 5);
     const auction = await market.auctions(lastId);
-    expect(await market.showNFT(lastId)).to.equal('test');
+    expect(auction.seller).to.equal(otherAccounts[0].address);
+    expect(auction.minimumPrice).to.equal(100);
   });
 });
 
