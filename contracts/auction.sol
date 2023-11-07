@@ -4,11 +4,11 @@ pragma solidity ^0.8.0;
 
 import "./NFTMarket.sol";
 
-struct Swap{
-    address seller;
-    uint256 tokenId;
-    uint256 price;
-    bool incomplete;
+enum Status{
+    owned,
+    ethSwap,
+    abcSwap,
+    auction
 }
 
 struct Auction {
@@ -53,13 +53,13 @@ contract AuctionContract is NFTMarket{
                         uint256 amount
                         );
 
-    mapping(uint256 => Swap) public ethSwaps;
-    mapping(uint256 => Swap) public tokenSwaps;
+    mapping(uint256 => Status) public Statuses;
     mapping(uint256 => Auction) public auctions;
     mapping(uint256 => mapping(address => uint256)) public bidding;
 
     modifier checkSell(uint256 tokenId){
         require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
+        require(Statuses[tokenId] == Status.owned, "NFT already in sell");
         _;
     }
 
@@ -68,10 +68,9 @@ contract AuctionContract is NFTMarket{
         uint256 minimumPrice,
         uint256 duration
     ) external validTokenId(tokenId) checkSell(tokenId) {
-        
-        require(ethSwaps[tokenId].seller == address(0), "Already for sell by ETH");
-        require(tokenSwaps[tokenId].seller == address(0), "Already for sell by ABCoin");
+
         require(minimumPrice > 0, "Must set a solid minimum price");
+        Statuses[tokenId] = Status.auction;
 
         uint256 endTime = block.timestamp + duration * 1 minutes;
 
@@ -125,6 +124,8 @@ contract AuctionContract is NFTMarket{
             nftm.safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
             payable(auction.seller).transfer(auction.highestBid);
         }
+        
+        Statuses[tokenId] = Status.owned;
 
         emit AuctionEnded(
                         auction.seller, 

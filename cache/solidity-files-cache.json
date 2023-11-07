@@ -266,8 +266,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\market.sol": {
-      "lastModificationDate": 1699299026961,
-      "contentHash": "2acf9e05282038d8fc7ded0a20ca95fa",
+      "lastModificationDate": 1699342248551,
+      "contentHash": "b9dbf4605827fff71bdcb8634833cf81",
       "sourceName": "contracts/market.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -305,8 +305,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\auction.sol": {
-      "lastModificationDate": 1699299026960,
-      "contentHash": "39869b1f1c2c13ea0992acc921abd806",
+      "lastModificationDate": 1699342278521,
+      "contentHash": "7f4265f3a999e1d01f47a91d24bee343",
       "sourceName": "contracts/auction.sol",
       "solcConfig": {
         "version": "0.8.20",

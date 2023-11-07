@@ -4,6 +4,13 @@ pragma solidity ^0.8.0;
 import "./auction.sol";
 import "./abCoin.sol";
 
+struct Swap{
+    address seller;
+    uint256 tokenId;
+    uint256 price;
+    bool incomplete;
+}
+
 contract Market is AuctionContract{
 
     event ETHSwapOrderSet(address seller, uint256 tokenId, uint256 price);
@@ -13,6 +20,8 @@ contract Market is AuctionContract{
     event TokenSwapOrderDone(address seller, address buyer, uint256 tokenId, uint256 price);
 
     ABCoin public abcoin;
+    mapping(uint256 => Swap) public ethSwaps;
+    mapping(uint256 => Swap) public tokenSwaps;
 
     constructor (address abc){
         abcoin = ABCoin(abc);
@@ -24,10 +33,8 @@ contract Market is AuctionContract{
 
     function setETHSwapOrder(uint256 tokenId, uint256 price) 
         external validTokenId(tokenId) checkSell(tokenId) {
-
-        require(tokenSwaps[tokenId].seller == address(0), "Already for sell by ABCoin");
-        require(auctions[tokenId].seller == address(0), "Already for sell in auction");
         require(price > 0, "Must set a solid price");
+        Statuses[tokenId] = Status.ethSwap;
 
         ethSwaps[tokenId] = Swap(
             msg.sender,
@@ -52,7 +59,9 @@ contract Market is AuctionContract{
 
         payable(swap.seller).transfer(swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
+
         swap.incomplete = false;
+        Statuses[tokenId] = Status.owned;
 
         emit ETHSwapOrderDone(swap.seller, msg.sender, tokenId, swap.price);
     }
@@ -64,9 +73,8 @@ contract Market is AuctionContract{
     function setTokenSwapOrder(uint256 tokenId, uint256 price) 
         external validTokenId(tokenId) checkSell(tokenId) {
             
-        require(ethSwaps[tokenId].seller == address(0), "Already for sell by ETH");
-        require(auctions[tokenId].seller == address(0), "Already for sell in auction");
         require(price > 0, "Must set a solid price");
+        Statuses[tokenId] = Status.abcSwap;
 
         tokenSwaps[tokenId] = Swap(
             msg.sender,
@@ -92,7 +100,9 @@ contract Market is AuctionContract{
 
         abcoin.transferFrom(msg.sender, swap.seller, swap.price);
         nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
+        
         swap.incomplete = false;
+        Statuses[tokenId] = Status.owned;
 
         emit TokenSwapOrderDone(swap.seller, msg.sender, tokenId, swap.price);
     }
