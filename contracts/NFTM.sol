@@ -19,10 +19,6 @@ contract NFTM is ERC721URIStorage, Ownable{
         _setTokenURI(tokenIds, tokenURI);
         approve(address(this), tokenIds);
         emit NFTCreated(msg.sender, tokenIds);
-    } 
-
-    function setTokenURI(uint256 newItemId, string memory _tokenURI) external onlyOwner {
-        _setTokenURI(newItemId, _tokenURI);
     }
 
     function exists(uint256 tokenId) external view returns (bool){
