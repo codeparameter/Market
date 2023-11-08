@@ -306,8 +306,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\auction.sol": {
-      "lastModificationDate": 1699437909910,
-      "contentHash": "0091cd52f0882117407bcfa117a8e68b",
+      "lastModificationDate": 1699446485458,
+      "contentHash": "75ed9123a9fedb3f40375a0f6925fb4f",
       "sourceName": "contracts/auction.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -334,7 +334,8 @@
         }
       },
       "imports": [
-        "./NFTM.sol"
+        "./NFTM.sol",
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "^0.8.0"

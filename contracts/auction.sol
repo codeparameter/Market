@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 
 import "./NFTM.sol";
+import "hardhat/console.sol";
 
 enum Status{
     owned,
@@ -71,7 +72,7 @@ contract AuctionContract is NFTM{
     ) external validTokenId(tokenId) checkSell(tokenId, Status.auction) {
 
         require(minimumPrice > 0, "Must set a solid minimum price");
-        uint256 endTime = block.timestamp + duration * 1 minutes;
+        uint256 endTime = block.timestamp + duration * 1 seconds;
 
         auctions[tokenId] = Auction({
             seller: msg.sender,
@@ -115,13 +116,19 @@ contract AuctionContract is NFTM{
     function endAuction(uint256 tokenId) external {
         Auction storage auction = getAuction(tokenId);
         require(block.timestamp >= auction.endTime, "Auction not yet ended");
+        console.log("hi1");
         require(auction.incomplete, "Auction already ended");
 
         auction.incomplete = false;
         if (auction.highestBid != 0) {
             // Transfer the NFT to the highest bidder
+            console.log("hi2");
             safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
+            console.log("hi3");
             payable(auction.seller).transfer(auction.highestBid);
+        }
+        else {
+            console.log("bye");
         }
         
         Statuses[tokenId] = Status.owned;
