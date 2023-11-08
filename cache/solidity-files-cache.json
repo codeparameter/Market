@@ -306,8 +306,8 @@
       ]
     },
     "E:\\programming\\quera-blockachain-bootcamp\\lms\\Market\\contracts\\auction.sol": {
-      "lastModificationDate": 1699446485458,
-      "contentHash": "75ed9123a9fedb3f40375a0f6925fb4f",
+      "lastModificationDate": 1699449378912,
+      "contentHash": "4ce01d4e0e49d4d2fb0b4a0d89638ae8",
       "sourceName": "contracts/auction.sol",
       "solcConfig": {
         "version": "0.8.20",

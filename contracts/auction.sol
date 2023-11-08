@@ -114,21 +114,16 @@ contract AuctionContract is NFTM{
     }
 
     function endAuction(uint256 tokenId) external {
+        require(ownerOf(tokenId) == msg.sender, "you are not the NFT seller");
         Auction storage auction = getAuction(tokenId);
         require(block.timestamp >= auction.endTime, "Auction not yet ended");
-        console.log("hi1");
         require(auction.incomplete, "Auction already ended");
 
         auction.incomplete = false;
         if (auction.highestBid != 0) {
             // Transfer the NFT to the highest bidder
-            console.log("hi2");
             safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
-            console.log("hi3");
             payable(auction.seller).transfer(auction.highestBid);
-        }
-        else {
-            console.log("bye");
         }
         
         Statuses[tokenId] = Status.owned;
@@ -146,12 +141,12 @@ contract AuctionContract is NFTM{
     function payBack(uint256 tokenId) external{
         Auction storage auction = getAuction(tokenId);
         require(auction.highestBidder != msg.sender, 
-            "You can't cancel your bid unless someone bid higher than you");
+            "You can't cancel your bid unless someone bids higher than you");
             
         // customized err msg:
         require(bidding[tokenId][msg.sender] > 0, "You did'nt bid at all");
         payable(msg.sender).transfer(bidding[tokenId][msg.sender]);
-
+        
         emit PayBack(auction.seller, msg.sender, tokenId, bidding[tokenId][msg.sender]);
 
         bidding[tokenId][msg.sender] = 0;

@@ -39,32 +39,53 @@ describe("market tests", () => {
     
     const { market, otherAccounts, createNFT } = await setUp();
     const lastId = await createNFT(otherAccounts[0], "test");
-    await market.connect(otherAccounts[0]).createAuction(lastId, 100, 10000);
+
+    const duration = 10000; // ms
+
+    await market.connect(otherAccounts[0]).createAuction(lastId, 100, duration);
+
+    const oldBalance0 = await ethers.provider.getBalance(otherAccounts[0].address);
+    const oldBalance1 = await ethers.provider.getBalance(otherAccounts[1].address);
+    const oldBalance2 = await ethers.provider.getBalance(otherAccounts[2].address);
+    const oldBalance3 = await ethers.provider.getBalance(otherAccounts[3].address);
+    const oldBalance4 = await ethers.provider.getBalance(otherAccounts[4].address);
     
     await market.connect(otherAccounts[1]).bid(lastId, {value: 101});
     await market.connect(otherAccounts[2]).bid(lastId, {value: 102});
     await market.connect(otherAccounts[3]).bid(lastId, {value: 103});
-    await market.connect(otherAccounts[1]).bid(lastId, {value: 3});
+    await market.connect(otherAccounts[4]).bid(lastId, {value: 104});
+    await market.connect(otherAccounts[1]).bid(lastId, {value: 4});
     
     await market.connect(otherAccounts[2]).payBack(lastId);
     await market.connect(otherAccounts[3]).payBack(lastId);
+    await market.connect(otherAccounts[4]).payBack(lastId);
 
-    await delay(10000);
+    await ethers.provider.send('evm_increaseTime', [duration]);
 
     market.connect(otherAccounts[0]).endAuction(lastId);
 
     const auction = await market.auctions(lastId);
     
-    expect(auction.highestBid).to.equal(104);
+    expect(auction.highestBid).to.equal(105);
     expect(auction.highestBidder).to.equal(otherAccounts[1].address);
 
-    console.log(otherAccounts[0].address);
     expect(await market.connect(otherAccounts[1]).ownerOf(lastId)).to.equal(otherAccounts[1].address);
 
+    const newBalance0 = await ethers.provider.getBalance(otherAccounts[0].address);
+    const newBalance1 = await ethers.provider.getBalance(otherAccounts[1].address);
+    const newBalance2 = await ethers.provider.getBalance(otherAccounts[2].address);
+    const newBalance3 = await ethers.provider.getBalance(otherAccounts[3].address);
+    const newBalance4 = await ethers.provider.getBalance(otherAccounts[4].address);
+
+    // because of Gas fee
+
+    expect(newBalance0).to.lt(oldBalance0.add(auction.highestBid));
+    expect(newBalance1).to.lt(oldBalance1.sub(auction.highestBid));
+    expect(newBalance2).to.lt(oldBalance2);
+    expect(newBalance3).to.lt(oldBalance3);
+    expect(newBalance4).to.lt(oldBalance4);
   });
 });
-
-async function delay (ms) { await new Promise(resolve => setTimeout(resolve, ms));}
 
 async function deploy(name, ...args) {
   const Contract = await hre.ethers.getContractFactory(name);
