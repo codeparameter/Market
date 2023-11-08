@@ -2,7 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./auction.sol";
-import "./abCoin.sol";
+import "./dealmaker.sol";
+import "hardhat/console.sol";
 
 struct Swap{
     address seller;
@@ -19,12 +20,12 @@ contract Market is AuctionContract{
     event TokenSwapOrderSet(address seller, uint256 tokenId, uint256 price);
     event TokenSwapOrderDone(address seller, address buyer, uint256 tokenId, uint256 price);
 
-    ABCoin public abcoin;
+    DealMaker public abcoin;
     mapping(uint256 => Swap) public ethSwaps;
     mapping(uint256 => Swap) public tokenSwaps;
 
     constructor (address abc){
-        abcoin = ABCoin(abc);
+        abcoin = DealMaker(abc);
     }
 
     //
@@ -57,7 +58,7 @@ contract Market is AuctionContract{
         require(msg.value >= price, "Insufficient payment for the NFT");
 
         payable(swap.seller).transfer(swap.price);
-        nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
+        safeTransferFrom(swap.seller, msg.sender, tokenId);
 
         swap.incomplete = false;
         Statuses[tokenId] = Status.owned;
@@ -97,7 +98,7 @@ contract Market is AuctionContract{
         require(abcoin.balanceOf(msg.sender) >= price, "Insufficient payment for the NFT");
 
         abcoin.transferFrom(msg.sender, swap.seller, swap.price);
-        nftm.safeTransferFrom(swap.seller, msg.sender, tokenId);
+        safeTransferFrom(swap.seller, msg.sender, tokenId);
         
         swap.incomplete = false;
         Statuses[tokenId] = Status.owned;

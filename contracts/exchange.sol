@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "./ownable.sol";
 import "./abCoin.sol";
 
-contract Exchange is Ownable{
+contract Exchange is ABCoin{
 
     event BuyRequestStored(
         address buyer, 
@@ -44,13 +44,8 @@ contract Exchange is Ownable{
         bool allAtOnce;
     }
 
-    ABCoin public abcoin = new ABCoin();
     ExchangeRequest[] public buyRequests;
     ExchangeRequest[] public sellRequests;
-
-    function createABCoin(address account, uint256 amount) external onlyOwner{
-        abcoin.mint(account, amount);
-    }
 
     // 
     // 

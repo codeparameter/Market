@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 
-import "./NFTMarket.sol";
+import "./NFTM.sol";
 
 enum Status{
     owned,
@@ -21,7 +21,7 @@ struct Auction {
     bool incomplete;
 }
 
-contract AuctionContract is NFTMarket{
+contract AuctionContract is NFTM{
 
     event AuctionCreated(
                         address seller,
@@ -58,7 +58,7 @@ contract AuctionContract is NFTMarket{
     mapping(uint256 => mapping(address => uint256)) public bidding;
 
     modifier checkSell(uint256 tokenId, Status status){
-        require(nftm.ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
+        require(ownerOf(tokenId) == msg.sender, "Not the owner of the NFT");
         require(Statuses[tokenId] == Status.owned, "NFT already in sell");
         _;
         Statuses[tokenId] = status;
@@ -120,7 +120,7 @@ contract AuctionContract is NFTMarket{
         auction.incomplete = false;
         if (auction.highestBid != 0) {
             // Transfer the NFT to the highest bidder
-            nftm.safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
+            safeTransferFrom(auction.seller, auction.highestBidder, tokenId);
             payable(auction.seller).transfer(auction.highestBid);
         }
         
