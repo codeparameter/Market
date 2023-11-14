@@ -114,10 +114,12 @@ contract AuctionContract is NFTM{
     }
 
     function endAuction(uint256 tokenId) external {
-        require(ownerOf(tokenId) == msg.sender, "you are not the NFT seller");
         Auction storage auction = getAuction(tokenId);
+        
         require(block.timestamp >= auction.endTime, "Auction not yet ended");
         require(auction.incomplete, "Auction already ended");
+        require(msg.sender == ownerOf(tokenId) || msg.sender == auction.highestBidder, 
+            "Only seller or higest bidder can end the auction");
 
         auction.incomplete = false;
         if (auction.highestBid != 0) {
